@@ -1,0 +1,49 @@
+{
+  "name": "dsh-deepseek-balance",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DSH 插件：在侧边栏底部显示 DeepSeek API 账户余额剩余量",
+  "type": "module",
+  "main": "lib/index.js",
+  "files": [
+    "lib/",
+    "install.sh",
+    "uninstall.sh",
+    "bootstrap.sh",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ]
+    }
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek",
+    "balance"
+  ],
+  "author": "Mistakeman56",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mistakeman56/dsh-deepseek-balance.git"
+  },
+  "homepage": "https://github.com/Mistakeman56/dsh-deepseek-balance#readme",
+  "bugs": {
+    "url": "https://github.com/Mistakeman56/dsh-deepseek-balance/issues"
+  }
+}
