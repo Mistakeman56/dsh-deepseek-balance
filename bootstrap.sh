@@ -47,19 +47,21 @@ CORE_FILES="package.json lib/index.js lib/client.js install.sh"
 EXTRA_FILES="uninstall.sh README.md"
 
 MIRRORS="
-https://raw.githubusercontent.com/${REPO}/${REF}
 https://cdn.jsdelivr.net/gh/${REPO}@${REF}
+https://raw.githubusercontent.com/${REPO}/${REF}
 https://github.com/${REPO}/raw/${REF}
 "
 
 fetch_from() {
   local base="$1" dir="$2" f
+  # 先用最小的那张文件探活，避免不可达的镜像把每个文件都拖到超时
+  curl -fsSL --connect-timeout 4 --max-time 8 "$base/package.json" -o /dev/null 2>/dev/null || return 1
   mkdir -p "$dir/lib" || return 1
   for f in $CORE_FILES; do
-    curl -fsSL --retry 1 --connect-timeout 10 --max-time 60 "$base/$f" -o "$dir/$f" 2>/dev/null || return 1
+    curl -fsSL --retry 1 --connect-timeout 6 --max-time 45 "$base/$f" -o "$dir/$f" 2>/dev/null || return 1
   done
   for f in $EXTRA_FILES; do
-    curl -fsSL --connect-timeout 10 --max-time 60 "$base/$f" -o "$dir/$f" 2>/dev/null || true
+    curl -fsSL --connect-timeout 6 --max-time 45 "$base/$f" -o "$dir/$f" 2>/dev/null || true
   done
   # 防止把 HTML 错误页当成源码存下来
   grep -q "__ModuleLoader__" "$dir/lib/client.js" 2>/dev/null || return 1
