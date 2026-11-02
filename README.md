@@ -23,20 +23,27 @@ DSH 插件：在 Web GUI 的**侧边栏底部**显示 DeepSeek API 账户余额�
 ## 安装（推荐：一行命令，从云端装）
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Mistakeman56/dsh-deepseek-balance/main/bootstrap.sh \
-  | bash -s -- --profile web
+curl -fsSL https://cdn.jsdelivr.net/gh/Mistakeman56/dsh-deepseek-balance@v0.1.1/bootstrap.sh \
+  | bash -s -- --ref v0.1.1 --profile web
 ```
 
-它会下载仓库、装进目标 profile、登记补丁条目，然后提示你刷新页面。
+它会拉取插件文件、装进目标 profile、登记补丁条目，然后提示你刷新页面。
 
-- `--profile <name>`：装到哪个 profile，默认 `web`（`dsh web` 用的就是它）
-- 想锁定版本：把 `--ref v0.1.0` 放在参数**最前面**
-- 大陆网络拉 GitHub 较慢时，先给终端配好代理，或改用下面的离线包
+- 默认装到 `web` profile（`dsh web` 用的就是它）；换 profile 改 `--profile <名字>`
+- 大陆网络下优先走 jsDelivr（上面这条），raw.githubusercontent.com 多数时候不通
+- 如果 jsDelivr 也不通，可以用 GitHub 原始地址（需代理）：
+
+  ```sh
+  curl -fsSL https://raw.githubusercontent.com/Mistakeman56/dsh-deepseek-balance/v0.1.1/bootstrap.sh \
+    | bash -s -- --ref v0.1.1 --profile web
+  ```
+
+脚本内部有多镜像回退（jsDelivr → raw → github raw），任意一个通就能装上。
 
 ## 安装（离线包 / 已有 tgz）
 
 ```sh
-tar -xzf dsh-deepseek-balance-0.1.0.tgz
+tar -xzf dsh-deepseek-balance-0.1.1.tgz
 cd package
 ./install.sh --profile web
 ```
@@ -45,11 +52,12 @@ cd package
 
 ```sh
 dsh plugin --profile web add \
-  https://github.com/Mistakeman56/dsh-deepseek-balance/releases/download/v0.1.0/dsh-deepseek-balance-0.1.0.tgz
+  https://github.com/Mistakeman56/dsh-deepseek-balance/releases/download/v0.1.1/dsh-deepseek-balance-0.1.1.tgz
 ```
 
 这条只把包装进 `node_modules`，**还要**按下面“手动，不想跑脚本”的第 2 步登记
 loader 条目，否则插件不会加载。所以一般直接用上面的 `curl | bash` 更省事。
+注意：GitHub 的 Release 下载在国内常被墙，需要代理。
 
 ## 安装脚本做了什么
 
@@ -136,4 +144,5 @@ loader 条目，否则插件不会加载。所以一般直接用上面的 `curl 
 
 ## 版本
 
+- `0.1.1` — 修复云端安装：逐文件拉取 + 多镜像回退，国内网络可用
 - `0.1.0` — 首个版本
